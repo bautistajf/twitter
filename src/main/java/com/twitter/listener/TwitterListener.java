@@ -1,8 +1,11 @@
 package com.twitter.listener;
 
+import static java.lang.String.format;
+
 import com.twitter.configuration.TwitterConfiguration;
 import com.twitter.entity.TweetEntity;
 import com.twitter.service.TwitterService;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.InitializingBean;
@@ -55,7 +58,8 @@ public class TwitterListener implements InitializingBean {
                     TweetEntity tweetEntity = TweetEntity.builder()
                         .user(status.getUser().getScreenName())
                         .text(status.getText())
-                        .localization(status.getUser().getLocation())
+                        .localization(Objects.isNull(status.getGeoLocation()) ? null
+                            : format("%s, %s", status.getGeoLocation().getLatitude(), status.getGeoLocation().getLongitude()))
                         .build();
                     twitterService.save(tweetEntity);
                 }
