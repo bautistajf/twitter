@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -13,6 +14,7 @@ import com.twitter.entity.TweetEntity;
 import com.twitter.exception.ServiceException;
 import com.twitter.service.TwitterService;
 import java.util.List;
+import java.util.Map;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -84,5 +86,20 @@ class TwitterFacadeImplTest {
         Throwable exception = catchThrowable(() -> facade.validateTweet(1L));
 
         Assertions.assertThat(exception).isExactlyInstanceOf(ServiceException.class);
+    }
+
+    @Test
+    void getAllTweetsValidatedByUsers_should_call_get_all_tweets_validated_by_users_service() {
+
+        when(service.getAllTweetsValidatedByUsers()).thenReturn(TwitterMock.getTweetsMap());
+        Map<String, List<TweetEntity>> list = facade.getAllTweetsValidatedByUsers();
+
+        assertEquals(1, list.size());
+        assertTrue(list.containsKey(TwitterMock.USER));
+        assertEquals(1L, list.get(TwitterMock.USER).get(0).getId());
+        assertEquals(TwitterMock.TEXT, list.get(TwitterMock.USER).get(0).getText());
+        assertEquals(TwitterMock.LOCALIZATION, list.get(TwitterMock.USER).get(0).getLocalization());
+        assertEquals(TwitterMock.USER, list.get(TwitterMock.USER).get(0).getUser());
+        assertFalse(list.get(TwitterMock.USER).get(0).isValidation());
     }
 }

@@ -17,6 +17,7 @@ import com.twitter.entity.TweetEntity;
 import com.twitter.exception.ServiceException;
 import com.twitter.repository.TwitterRepository;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -137,4 +138,18 @@ class TwitterServiceImplTest {
 
     }
 
+    @Test
+    void getAllTweetsValidatedByUsers_should_call_find_all_by_validation_repository() {
+
+        when(repository.findAllByValidation(eq(true))).thenReturn(TwitterMock.getTweets());
+        Map<String, List<TweetEntity>> list = service.getAllTweetsValidatedByUsers();
+
+        assertEquals(1, list.size());
+        assertTrue(list.containsKey(TwitterMock.USER));
+        assertEquals(1L, list.get(TwitterMock.USER).get(0).getId());
+        assertEquals(TwitterMock.TEXT, list.get(TwitterMock.USER).get(0).getText());
+        assertEquals(TwitterMock.LOCALIZATION, list.get(TwitterMock.USER).get(0).getLocalization());
+        assertEquals(TwitterMock.USER, list.get(TwitterMock.USER).get(0).getUser());
+        assertFalse(list.get(TwitterMock.USER).get(0).isValidation());
+    }
 }

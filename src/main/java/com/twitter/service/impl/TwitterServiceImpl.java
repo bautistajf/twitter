@@ -10,9 +10,12 @@ import com.twitter.repository.TwitterRepository;
 import com.twitter.service.TwitterService;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import twitter4j.Trend;
 import twitter4j.Trends;
 import twitter4j.Twitter;
@@ -33,6 +36,7 @@ public class TwitterServiceImpl implements TwitterService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public TweetEntity validateTweet(Long id) throws ServiceException {
         TweetEntity entity = repository.findById(id).orElseThrow(() -> new ServiceException(BAD_REQUEST,
             ERROR_DB_001.getName(), ERROR_DB_001));
@@ -44,6 +48,12 @@ public class TwitterServiceImpl implements TwitterService {
     @Override
     public List<TweetEntity> getTweetsValidatedByUser(String user) {
         return repository.findAllByUserAndValidation(user, true) ;
+    }
+
+    @Override
+    public Map<String, List<TweetEntity>> getAllTweetsValidatedByUsers() {
+        return repository.findAllByValidation(true).stream().collect(
+            Collectors.groupingBy(TweetEntity::getUser));
     }
 
     @Override
@@ -66,6 +76,7 @@ public class TwitterServiceImpl implements TwitterService {
         }
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void save(TweetEntity twitter) {
         repository.save(twitter);

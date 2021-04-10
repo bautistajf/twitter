@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 import com.twitter.dto.ErrorDTO;
 import com.twitter.dto.TweetDTO;
+import com.twitter.entity.TweetEntity;
 import com.twitter.exception.ServiceException;
 import com.twitter.facade.TwitterFacade;
 import com.twitter.mapper.TwitterMapper;
@@ -17,6 +18,7 @@ import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.ResponseHeader;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpHeaders;
@@ -180,5 +182,40 @@ public class TwitterController {
         httpHeaders.set(ControllerHelper.HEADER_TOTAL_COUNT, String.valueOf(hashTagMoreUsed.size()));
         ControllerHelper.setProcessTime(timestamp, httpHeaders);
         return new ResponseEntity<>(hashTagMoreUsed, httpHeaders, OK);
+    }
+
+    @ApiOperation(
+        value = "Obtiene los tweets validados agrupados por usuario",
+        notes = "Retorna los tweets validados agrupados por usuario",
+        response = TweetDTO.class,
+        responseHeaders = {
+            @ResponseHeader(name = ControllerHelper.X_PROCESSTIME,
+                description = ControllerHelper.X_PROCESSTIME_DESC, response = Integer.class),
+            @ResponseHeader(name = ControllerHelper.X_INIT_TIMESTAMP,
+                description = ControllerHelper.X_INIT_TIMESTAMP_DESC, response = LocalDateTime.class),
+            @ResponseHeader(name = ControllerHelper.X_REQUESTHOST,
+                description = ControllerHelper.X_REQUESTHOST_DESC, response = String.class),
+            @ResponseHeader(name = ControllerHelper.X_SERVICENAME,
+                description = ControllerHelper.X_SERVICENAME_DESC, response = String.class),
+            @ResponseHeader(name = ControllerHelper.X_VERSION,
+                description = ControllerHelper.X_VERSION_DESC, response = String.class)
+        }
+    )
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Success"),
+        @ApiResponse(code = 401, message = "Unauthorized", response = ErrorDTO.class),
+        @ApiResponse(code = 403, message = "Forbidden", response = ErrorDTO.class),
+        @ApiResponse(code = 500, message = "Failure", response = ErrorDTO.class)
+    })
+    @GetMapping(value = "/allTweetsValidatedByUsers")
+    public ResponseEntity<Map<String, List<TweetEntity>>>  getAllTweetsValidatedByUsers() {
+        LocalDateTime timestamp = LocalDateTime.now();
+        HttpHeaders httpHeaders = ControllerHelper.getHeaders(timestamp);
+
+        Map<String, List<TweetEntity>>   tweetList = facade.getAllTweetsValidatedByUsers();
+
+        httpHeaders.set(ControllerHelper.HEADER_TOTAL_COUNT, String.valueOf(tweetList.size()));
+        ControllerHelper.setProcessTime(timestamp, httpHeaders);
+        return new ResponseEntity<>(tweetList, httpHeaders, OK);
     }
 }

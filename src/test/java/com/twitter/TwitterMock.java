@@ -2,7 +2,7 @@ package com.twitter;
 
 import com.twitter.entity.TweetEntity;
 import java.util.List;
-import org.mapstruct.Builder;
+import java.util.Map;
 import twitter4j.Trend;
 
 public interface TwitterMock {
@@ -15,6 +15,10 @@ public interface TwitterMock {
 
     static List<TweetEntity> getTweets() {
         return List.of(getTweet());
+    }
+
+    static Map<String, List<TweetEntity>> getTweetsMap() {
+        return Map.of(USER, List.of(getTweet()));
     }
 
     static List<TweetEntity> getValidatedTweets() {

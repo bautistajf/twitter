@@ -3,6 +3,7 @@ package com.twitter.service;
 import com.twitter.entity.TweetEntity;
 import com.twitter.exception.ServiceException;
 import java.util.List;
+import java.util.Map;
 
 public interface TwitterService {
 
@@ -15,4 +16,6 @@ public interface TwitterService {
     List<String> getHashTagsMoreUsed() throws ServiceException;
 
     void save(TweetEntity twitter);
+
+    Map<String, List<TweetEntity>> getAllTweetsValidatedByUsers();
 }

@@ -3,6 +3,7 @@ package com.twitter.facade;
 import com.twitter.entity.TweetEntity;
 import com.twitter.exception.ServiceException;
 import java.util.List;
+import java.util.Map;
 
 public interface TwitterFacade {
 
@@ -13,4 +14,6 @@ public interface TwitterFacade {
     List<TweetEntity> getTweetsValidatedByUser(String user);
 
     List<String> getHashTagsMoreUsed() throws ServiceException;
+
+    Map<String, List<TweetEntity>>  getAllTweetsValidatedByUsers();
 }

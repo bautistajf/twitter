@@ -96,6 +96,32 @@ curl -X GET "http://localhost:8081/twitter-srv/1.0/tweets/validadosPorUsuario/He
 ]
 ```
 
+##### Obtener los tweets validados por usuario agrupados por usuario
+Obtiene los tweets validados agrupados por usuario
+```
+curl -X GET "http://localhost:8081/twitter-srv/1.0/tweets/allTweetsValidatedByUsers" -H "accept: application/json" -H "X-XSRF-TOKEN: 1eb4dag4um5dhg42pleaatp6am"
+```
+
+##### Respuesta
+Retorna por cada usuarios los tweets validados.
+```
+{
+  "_AJamaisLes1ers": {
+    "id": 4,
+    "user": "_AJamaisLes1ers",
+    "text": "RT @Toooto_13: Le match de Thauvin à montrer dans tous les lieux de vaccination du Covid 19",
+    "validation": true
+  },
+  "veronicafoxley1": {
+    "id": 25,
+    "user": "veronicafoxley1",
+    "text": "RT @Stephduchili: EEUU: Debra Hunter de Florida que tosió a propósito a la cara de una paciente con cáncer en una tienda fue sentenciada a…",
+    "validation": true
+  }
+}
+```
+
+
 
 ##### Valida el tweet por ID
 Cambia el estado de validacion a true a un tweet.

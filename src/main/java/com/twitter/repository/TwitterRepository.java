@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface TwitterRepository extends JpaRepository<TweetEntity, Long> {
 
     List<TweetEntity> findAllByUserAndValidation(String name, boolean validation);
+
+    List<TweetEntity> findAllByValidation(boolean validation);
 }

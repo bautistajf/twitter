@@ -5,6 +5,7 @@ import com.twitter.exception.ServiceException;
 import com.twitter.facade.TwitterFacade;
 import com.twitter.service.TwitterService;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +30,14 @@ public class TwitterFacadeImpl implements TwitterFacade {
         return service.getTweetsValidatedByUser(user);
     }
 
+
     @Override
     public List<String> getHashTagsMoreUsed() throws ServiceException {
         return service.getHashTagsMoreUsed();
+    }
+
+    @Override
+    public Map<String, List<TweetEntity>>  getAllTweetsValidatedByUsers() {
+        return service.getAllTweetsValidatedByUsers();
     }
 }

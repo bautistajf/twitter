@@ -128,4 +128,23 @@ class TwitterControllerTest {
             .andExpect(jsonPath("$.text", is(TwitterMock.TEXT)))
             .andExpect(jsonPath("$.validation", is(true)));
     }
+
+    @Test
+    void getAllTweetsValidatedByUsers_should_return_a_list_of_tweet_grouped() throws Exception {
+        when(repository.findAllByValidation (true)).thenReturn(TwitterMock.getValidatedTweets());
+
+        mockMvc
+            .perform(get(TwitterMock.PATH + "/allTweetsValidatedByUsers")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+            )
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.['javier'].[0].user", is(TwitterMock.USER)))
+            .andExpect(jsonPath("$.['javier'].[0].id", is(1)))
+            .andExpect(jsonPath("$.['javier'].[0].user", is(TwitterMock.USER)))
+            .andExpect(jsonPath("$.['javier'].[0].localization", is(TwitterMock.LOCALIZATION)))
+            .andExpect(jsonPath("$.['javier'].[0].text", is(TwitterMock.TEXT)))
+            .andExpect(jsonPath("$.['javier'].[0].validation", is(true)));
+
+    }
 }
