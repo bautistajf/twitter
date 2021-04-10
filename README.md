@@ -1,10 +1,23 @@
 # Backend
 
-Este proyecto se generó con Java 11 y Spring Boot 2.5.7.
+Este proyecto se generó con Java 11 y Spring Boot 2.5.7, utilizando gradle, 
+swagger para la documentación de la api, mapstruct para mapeos entre entidades y dtos.
+Para los test unitarios se uso mockito con junit5, y para los test de integración se utilizó
+spring boot. 
 
 Se utilizó un diseño de facade, service y repositorio que es el que accede a una BD en memoria.
 
+Para mejorar el almacenamiento de los tweets, se podria haber implementado alguna cola de mensajes, para
+mejorar el rendimiento.
 
+Hice un metodo mas, para retornar los tweets validados, porque no sabia si querian verlos agrupados por usuario o
+solamente pasandole un usuario al endpoint mostrar los tweets validados por ese usuario.
+
+Lo mismo me surgio una duda en "Consultar una clasificación de los N hashtags más usados (default 10)."
+Para este no sabia si querian mostrar los 10 hastags mas usados de internet, que es lo que realice, o con todos los 
+tweets que iba almacenando, ver los hashtags de estos tweets, y luego retornar estos los 10 mas usados.
+Para esta ultima solucion, hubiera implementado un hashmap de hashtag, almacenando para cada clave la cantidad de veces
+que aparecian en los tweets, y luego mostrar esto en el endpoint.
 
 ## Development server
 
